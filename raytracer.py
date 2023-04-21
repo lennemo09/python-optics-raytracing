@@ -8,12 +8,16 @@ def ray_intersect_segment(ray_origin, ray_direction, segment_A, segment_B):
     print(segment_A,segment_B)
     v1 = ray_origin - segment_A
     v2 = segment_B - segment_A
-    v3 = (-ray_direction[1], ray_direction[0])
+
+    if np.cross(v2, ray_direction) < 0:
+        v3 = (-ray_direction[1], ray_direction[0])
+    else:
+        v3 = (ray_direction[1], -ray_direction[0])
 
     if np.abs(np.dot(v2,v3)) < 1e-6:
         return None
 
-    t1 = np.cross(v2,v1)/np.dot(v2,v3)
+    t1 = np.abs(np.cross(v2,v1))/np.dot(v2,v3)
     t2 = np.dot(v1,v3) / np.dot(v2,v3)
 
     print(t1,t2)
@@ -36,10 +40,10 @@ def intersect_triangle(ray_origin, ray_direction, triangle_vertices):
     else:
         return intersections[np.argmin(distance_to_intersections)]
 
-triangle_vertices = np.array([[0, 0], [1, 3], [2, 0] ])
-light_source = np.array([3, 2])
+triangle_vertices = np.array([[0, 0], [2, 0], [1, 3]])
+light_source = np.array([0.5, 4])
 
-ray_direction = np.array([-1, 0])
+ray_direction = np.array([0, -1])
 
 for i in range(1):
     ray_origin = light_source
